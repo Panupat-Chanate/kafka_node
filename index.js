@@ -46,13 +46,12 @@ app.post("/producer", async (req, res) => {
       },
     ];
 
-    console.log(payload);
-
     producer.on("ready", async function () {
-      producer.send(payload, (error, data) => {
+      console.log("ready");
+      producer.send(payload, (err, data) => {
         console.log("data: ", data);
 
-        if (!error) {
+        if (!err) {
           res.json({ ok: true, message: data });
         } else {
           res.json({ ok: false, message: error });
