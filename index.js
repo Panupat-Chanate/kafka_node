@@ -8,7 +8,10 @@ const { Server } = require("socket.io");
 var bodyParser = require("body-parser");
 const cors = require("cors");
 
+var CONSUMER_RUNNING = true;
+
 const Producer = kafka.Producer;
+const Consumer = kafka.Consumer;
 const client = new kafka.KafkaClient({ kafkaHost: config.KafkaHost });
 const producer = new Producer(client, { requireAcks: 0, partitionerType: 2 });
 
@@ -66,31 +69,29 @@ app.post("/producer", async (req, res) => {
 
 app.post("/consumer", async (req, res) => {
   try {
-    const Consumer = kafka.Consumer;
-    const client = new kafka.KafkaClient({
-      idleConnection: 24 * 60 * 60 * 1000,
-      kafkaHost: config.KafkaHost,
-    });
+    if (CONSUMER_RUNNING) {
+      let consumer = new Consumer(
+        client,
+        [{ topic: req.body.body.topic, partition: 0 }],
+        {
+          autoCommit: true,
+          fetchMaxWaitMs: 1000,
+          fetchMaxBytes: 1024 * 1024,
+          encoding: "utf8",
+          fromOffset: true,
+        }
+      );
+      consumer.on("message", async function (message) {
+        console.log("data: ", message);
 
-    let consumer = new Consumer(
-      client,
-      [{ topic: req.body.body.topic, partition: 0 }],
-      {
-        autoCommit: true,
-        fetchMaxWaitMs: 1000,
-        fetchMaxBytes: 1024 * 1024,
-        encoding: "utf8",
-        fromOffset: true,
-      }
-    );
-    consumer.on("message", async function (message) {
-      console.log("data: ", message);
+        io.emit("consumer", message);
+      });
+      consumer.on("error", function (error) {
+        console.log("error", error);
+      });
 
-      io.emit("consumer", message);
-    });
-    consumer.on("error", function (error) {
-      console.log("error", error);
-    });
+      CONSUMER_RUNNING = false;
+    }
 
     res.json({ ok: true, message: "consumer's ready" });
   } catch (error) {
