@@ -82,7 +82,7 @@ app.post("/consumer", async (req, res) => {
       }
     );
     consumer.on("message", async function (message) {
-      console.log("data: ", JSON.parse(message));
+      console.log("data: ", message);
 
       io.emit("consumer", message);
     });
