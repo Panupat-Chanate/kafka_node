@@ -71,6 +71,10 @@ app.post("/producer", async (req, res) => {
 
 app.post("/consumer", async (req, res) => {
   try {
+    if (FOCUS_KEY !== req.body.body) {
+      CONSUMER_RUNNING = true;
+    }
+
     if (CONSUMER_RUNNING) {
       const Consumer = kafka.Consumer;
       const client = new kafka.KafkaClient({
