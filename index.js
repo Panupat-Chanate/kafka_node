@@ -74,7 +74,7 @@ app.post("/consumer", async (req, res) => {
     if (CONSUMER_RUNNING) {
       let consumer = new Consumer(
         client,
-        [{ topic: req.body.body.topic, partition: 0 }],
+        [{ topic: req.body.body.topic, key: 515, partition: 0 }],
         {
           autoCommit: true,
           fetchMaxWaitMs: 1000,
