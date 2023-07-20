@@ -16,7 +16,7 @@ try {
       fetchMaxWaitMs: 1000,
       fetchMaxBytes: 1024 * 1024,
       encoding: "utf8",
-      fromOffset: false
+      fromOffset: true
     }
   );
   consumer.on("message", async function (message) {

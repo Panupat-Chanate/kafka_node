@@ -15,7 +15,7 @@ const pushDataToKafka = (dataToPush) => {
         timestamp: Date.now(),
       },
     ];
-    console.log(payloadToKafkaTopic);
+
     producer.on("ready", async function () {
       producer.send(payloadToKafkaTopic, (err, data) => {
         console.log("data: ", data);
