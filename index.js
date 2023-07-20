@@ -80,7 +80,7 @@ app.post("/consumer", async (req, res) => {
 
       let consumer = new Consumer(
         client,
-        [{ topic: req.body.body.topic, partition: 0 }],
+        [{ topic: req.body.body.topic, key: res.body.body.key, partition: 0 }],
         {
           autoCommit: true,
           fetchMaxWaitMs: 1000,
@@ -93,7 +93,8 @@ app.post("/consumer", async (req, res) => {
       consumer.on("message", async function (message) {
         console.log("data: ", message);
 
-        if (message.key === FOCUS_KEY) io.emit("consumer", message);
+        // if (message.key === FOCUS_KEY)
+        io.emit("consumer", message);
       });
       consumer.on("error", function (error) {
         console.log("error", error);
