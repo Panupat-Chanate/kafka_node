@@ -46,21 +46,18 @@ app.post("/producer", async (req, res) => {
       },
     ];
 
-    producer.on("ready", async function () {
-      console.log("ready");
-      producer.send(payload, (err, data) => {
-        console.log("data: ", data);
+    producer.send(payload, (error, data) => {
+      console.log("data: ", data);
 
-        if (!err) {
-          res.json({ ok: true, message: data });
-        } else {
-          res.json({ ok: false, message: error });
-        }
-      });
-
-      producer.on("error", function (error) {
+      if (!error) {
+        res.json({ ok: true, message: data });
+      } else {
         res.json({ ok: false, message: error });
-      });
+      }
+    });
+
+    producer.on("error", function (error) {
+      res.json({ ok: false, message: error });
     });
   } catch (error) {
     res.json({ ok: false, message: error });
