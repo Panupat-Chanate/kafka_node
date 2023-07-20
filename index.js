@@ -8,6 +8,10 @@ const { Server } = require("socket.io");
 var bodyParser = require("body-parser");
 const cors = require("cors");
 
+const Producer = kafka.Producer;
+const client = new kafka.KafkaClient({ kafkaHost: config.KafkaHost });
+const producer = new Producer(client, { requireAcks: 0, partitionerType: 2 });
+
 app.use(cors());
 app.use(bodyParser.json());
 app.use(
