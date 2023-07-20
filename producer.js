@@ -8,17 +8,7 @@ const producer = new Producer(client, { requireAcks: 0, partitionerType: 2 });
 const pushDataToKafka = (dataToPush) => {
   try {
     let payloadToKafkaTopic = [
-      {
-        topic: config.KafkaTopic,
-        messages: ["ด.ช.รามี่"],
-        fullName: `นายภาณุพัฒน์ ชาเนตร`,
-        role: "teacher",
-        type: "text",
-        key: 515,
-        partition: 0,
-        // attributes: 2,
-        timestamp: Date.now(),
-      },
+      { topic: config.KafkaTopic, messages: JSON.stringify(dataToPush) },
     ];
     console.log(payloadToKafkaTopic);
     producer.on("ready", async function () {
