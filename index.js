@@ -46,6 +46,8 @@ app.post("/producer", async (req, res) => {
       },
     ];
 
+    console.log(payload);
+
     producer.on("ready", async function () {
       producer.send(payload, (error, data) => {
         console.log("data: ", data);
