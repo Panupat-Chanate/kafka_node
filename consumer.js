@@ -10,7 +10,7 @@ try {
 
   let consumer = new Consumer(
     client,
-    [{ topic: config.KafkaTopics, partition: 0 }],
+    [{ topic: config.KafkaTopic, partition: 0 }],
     {
       autoCommit: true,
       fetchMaxWaitMs: 1000,
