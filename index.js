@@ -11,7 +11,6 @@ const cors = require("cors");
 var CONSUMER_RUNNING = true;
 
 const Producer = kafka.Producer;
-const Consumer = kafka.Consumer;
 const client = new kafka.KafkaClient({ kafkaHost: config.KafkaHost });
 const producer = new Producer(client, { requireAcks: 0, partitionerType: 2 });
 
@@ -36,8 +35,6 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log("socket.io disconnected");
-
-    CONSUMER_RUNNING = true;
   });
 });
 
@@ -72,6 +69,12 @@ app.post("/producer", async (req, res) => {
 app.post("/consumer", async (req, res) => {
   try {
     if (CONSUMER_RUNNING) {
+      const Consumer = kafka.Consumer;
+      const client = new kafka.KafkaClient({
+        idleConnection: 24 * 60 * 60 * 1000,
+        kafkaHost: config.KafkaHost,
+      });
+
       let consumer = new Consumer(
         client,
         [{ topic: req.body.body.topic, partition: 0 }],
@@ -91,10 +94,9 @@ app.post("/consumer", async (req, res) => {
       consumer.on("error", function (error) {
         console.log("error", error);
       });
-
+      
       CONSUMER_RUNNING = false;
     }
-
     res.json({ ok: true, message: "consumer's ready" });
   } catch (error) {
     res.json({ ok: false, message: error });
