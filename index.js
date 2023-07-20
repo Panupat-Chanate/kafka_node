@@ -74,7 +74,7 @@ app.post("/consumer", async (req, res) => {
     if (CONSUMER_RUNNING) {
       let consumer = new Consumer(
         client,
-        [{ topic: req.body.body.topic, key: 515, partition: 0 }],
+        [{ topic: req.body.body.topic, partition: 0 }],
         {
           autoCommit: true,
           fetchMaxWaitMs: 1000,
@@ -86,9 +86,7 @@ app.post("/consumer", async (req, res) => {
       consumer.on("message", async function (message) {
         console.log("data: ", message);
 
-        if (message.key === res.boody.body.key) {
-          io.emit("consumer", message);
-        }
+        io.emit("consumer", message);
       });
       consumer.on("error", function (error) {
         console.log("error", error);
