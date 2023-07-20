@@ -72,8 +72,6 @@ app.post("/producer", async (req, res) => {
 app.post("/consumer", async (req, res) => {
   try {
     if (CONSUMER_RUNNING) {
-      console.log(res.body.body);
-
       const Consumer = kafka.Consumer;
       const client = new kafka.KafkaClient({
         idleConnection: 24 * 60 * 60 * 1000,
@@ -82,7 +80,7 @@ app.post("/consumer", async (req, res) => {
 
       let consumer = new Consumer(
         client,
-        [{ topic: req.body.body.topic, key: res.body.body.key, partition: 0 }],
+        [{ topic: req.body.body.topic, key: req.body.body.key, partition: 0 }],
         {
           autoCommit: true,
           fetchMaxWaitMs: 1000,
@@ -95,14 +93,13 @@ app.post("/consumer", async (req, res) => {
       consumer.on("message", async function (message) {
         console.log("data: ", message);
 
-        // if (message.key === FOCUS_KEY)
-        io.emit("consumer", message);
+        if (message.key === FOCUS_KEY) io.emit("consumer", message);
       });
       consumer.on("error", function (error) {
         console.log("error", error);
       });
 
-      FOCUS_KEY = res.body.body.key;
+      FOCUS_KEY = req.body.body.key;
       CONSUMER_RUNNING = false;
     }
     res.json({ ok: true, message: "consumer's ready" });
