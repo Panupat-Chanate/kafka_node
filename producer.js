@@ -12,6 +12,7 @@ const pushDataToKafka = (dataToPush) => {
         topic: config.KafkaTopic,
         key: 515,
         messages: JSON.stringify(dataToPush[0].value),
+        timestamp: Date.now(),
       },
     ];
     console.log(payloadToKafkaTopic);
