@@ -35,6 +35,8 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log("socket.io disconnected");
+
+    CONSUMER_RUNNING = true;
   });
 });
 
@@ -89,12 +91,12 @@ app.post("/consumer", async (req, res) => {
       consumer.on("message", async function (message) {
         console.log("data: ", message);
 
-        io.emit("consumer", message);
+        if (message.key === res.body.body.key) io.emit("consumer", message);
       });
       consumer.on("error", function (error) {
         console.log("error", error);
       });
-      
+
       CONSUMER_RUNNING = false;
     }
     res.json({ ok: true, message: "consumer's ready" });
