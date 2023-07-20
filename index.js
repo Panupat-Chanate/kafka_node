@@ -9,6 +9,7 @@ var bodyParser = require("body-parser");
 const cors = require("cors");
 
 var CONSUMER_RUNNING = true;
+var FOCUS_KEY;
 
 const Producer = kafka.Producer;
 const client = new kafka.KafkaClient({ kafkaHost: config.KafkaHost });
@@ -35,6 +36,8 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log("socket.io disconnected");
+
+    CONSUMER_RUNNING = true;
   });
 });
 
@@ -89,12 +92,13 @@ app.post("/consumer", async (req, res) => {
       consumer.on("message", async function (message) {
         console.log("data: ", message);
 
-        if (message.key === res.body.body.key) io.emit("consumer", message);
+        if (message.key === FOCUS_KEY) io.emit("consumer", message);
       });
       consumer.on("error", function (error) {
         console.log("error", error);
       });
 
+      FOCUS_KEY = res.body.body.key;
       CONSUMER_RUNNING = false;
     }
     res.json({ ok: true, message: "consumer's ready" });
