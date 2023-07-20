@@ -1,8 +1,6 @@
-require("dotenv").config();
-
 const config = {
-  KafkaHost: process.env.KAFKA_HOST,
-  KafkaTopic: process.env.KAFKA_TOPIC,
+  KafkaHost: "localhost:9092",
+  KafkaTopic: "kafka-panu-topic",
 };
 
 module.exports = config;
