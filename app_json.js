@@ -1,11 +1,13 @@
 const jsonData = [
   {
     key: 515,
-    fullName: `นายภาณุพัฒน์ ชาเนตร`,
-    role: "teacher",
-    type: "text",
-    value: "ด.ช.รามี่",
-    timestamp: Date.now(),
+    value: {
+      fullName: `นายภาณุพัฒน์ ชาเนตร`,
+      role: "teacher",
+      type: "text",
+      value: "ด.ช.รามี่",
+      timestamp: Date.now(),
+    },
   },
   {
     key: 515,
