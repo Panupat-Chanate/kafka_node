@@ -10,7 +10,15 @@ const pushDataToKafka = (dataToPush) => {
     let payloadToKafkaTopic = [
       {
         topic: config.KafkaTopic,
-        messages: dataToPush.map((x) => JSON.stringify(x)),
+        topic: "topicName",
+        messages: ["ด.ช.รามี่"],
+        fullName: `นายภาณุพัฒน์ ชาเนตร`,
+        role: "teacher",
+        type: "text",
+        key: 515,
+        partition: 0,
+        // attributes: 2,
+        timestamp: Date.now(),
       },
     ];
     console.log(payloadToKafkaTopic);
