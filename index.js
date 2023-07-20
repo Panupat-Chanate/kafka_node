@@ -72,6 +72,8 @@ app.post("/producer", async (req, res) => {
 app.post("/consumer", async (req, res) => {
   try {
     if (CONSUMER_RUNNING) {
+      console.log(res.body.body);
+
       const Consumer = kafka.Consumer;
       const client = new kafka.KafkaClient({
         idleConnection: 24 * 60 * 60 * 1000,
