@@ -87,6 +87,7 @@ app.post("/consumer", async (req, res) => {
           fetchMaxBytes: 1024 * 1024,
           encoding: "utf8",
           fromOffset: true,
+          keyEncoding: "utf8",
         }
       );
       consumer.on("message", async function (message) {
