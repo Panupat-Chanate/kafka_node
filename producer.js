@@ -10,10 +10,7 @@ const pushDataToKafka = (dataToPush) => {
     let payloadToKafkaTopic = [
       {
         topic: config.KafkaTopic,
-        messages: dataToPush.map((x) => {
-          x.value = JSON.stringify(x.value);
-          return x;
-        }),
+        messages: dataToPush.map((x) => JSON.stringify(x)),
       },
     ];
     console.log(payloadToKafkaTopic);
