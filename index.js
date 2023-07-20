@@ -35,8 +35,6 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log("socket.io disconnected");
-
-    CONSUMER_RUNNING = true;
   });
 });
 
