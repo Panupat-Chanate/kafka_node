@@ -24,6 +24,14 @@ const io = new Server(server, {
   },
 });
 
+io.on("connection", (socket) => {
+  console.log("socket.io connected");
+
+  socket.on("disconnect", () => {
+    console.log("socket.io disconnected");
+  });
+});
+
 app.post("/producer", async (req, res) => {
   try {
     let payload = [
@@ -88,14 +96,6 @@ app.post("/consumer", async (req, res) => {
   }
 });
 
-io.on("connection", (socket) => {
-  console.log("socket.io connected");
-
-  socket.on("disconnect", () => {
-    console.log("socket.io disconnected");
-  });
-
-  server.listen(5000, () => {
-    console.log("listening on *:5000");
-  });
+server.listen(5000, () => {
+  console.log("listening on *:5000");
 });
