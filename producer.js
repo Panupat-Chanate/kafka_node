@@ -10,7 +10,6 @@ const pushDataToKafka = (dataToPush) => {
     let payloadToKafkaTopic = [
       {
         topic: config.KafkaTopic,
-        topic: "topicName",
         messages: ["ด.ช.รามี่"],
         fullName: `นายภาณุพัฒน์ ชาเนตร`,
         role: "teacher",
