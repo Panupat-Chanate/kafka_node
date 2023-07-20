@@ -86,7 +86,9 @@ app.post("/consumer", async (req, res) => {
       consumer.on("message", async function (message) {
         console.log("data: ", message);
 
-        io.emit("consumer", message);
+        if (message.key === res.boody.body.key) {
+          io.emit("consumer", message);
+        }
       });
       consumer.on("error", function (error) {
         console.log("error", error);
