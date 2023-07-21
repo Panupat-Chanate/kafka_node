@@ -26,6 +26,8 @@ function connectSocket() {
 async function run() {
   const { socket } = await connectSocket();
 
+  console.log(socket);
+
   if (socket) {
     socket.emit("say-hi", { message: "Chat connected", id: socket.id });
 
