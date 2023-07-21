@@ -24,21 +24,21 @@ function connectSocket() {
 }
 
 async function run() {
-  const { socket } = await connectSocket();
+  const sock = await connectSocket();
 
-  console.log(socket);
+  console.log(sock);
 
-  if (socket) {
-    socket.emit("say-hi", { message: "Chat connected", id: socket.id });
+//   if (socket) {
+//     socket.emit("say-hi", { message: "Chat connected", id: socket.id });
 
-    socket.on("send-message", ({ key, message }) => {
-      produce({ from: socket.id, key, message });
-    });
+//     socket.on("send-message", ({ key, message }) => {
+//       produce({ from: socket.id, key, message });
+//     });
 
-    consume((data) => {
-      io.sockets.emit("get-message", { message: data });
-    });
-  }
+//     consume((data) => {
+//       io.sockets.emit("get-message", { message: data });
+//     });
+//   }
 }
 
 run().catch(console.error);
