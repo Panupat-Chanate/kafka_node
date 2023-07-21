@@ -31,8 +31,13 @@ const io = new Server(server, {
   },
 });
 
-io.on("connection", (socket) => {
+io.on("connection", async (socket) => {
   console.log("socket.io connected");
+
+  // const userId = await fetchUserId(socket);
+
+  // socket.join(userId);
+  // io.to(userId).emit("hi");
 
   socket.on("disconnect", () => {
     console.log("socket.io disconnected");
@@ -97,7 +102,9 @@ app.post("/consumer", async (req, res) => {
       consumer.on("message", async function (message) {
         console.log("data: ", message);
 
-        if (message.key === FOCUS_KEY) io.emit("consumer", message);
+        if (message.key === req.body.body.key) {
+          io.emit("consumer" + req.body.body.userid, message);
+        }
       });
       consumer.on("error", function (error) {
         console.log("error", error);
