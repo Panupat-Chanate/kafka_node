@@ -1,6 +1,8 @@
 const consume = require("./consumer.js");
 const produce = require("./producer.js");
 
+const express = require("express");
+const app = express();
 const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
