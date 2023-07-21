@@ -4,12 +4,12 @@ const Producer = kafka.Producer;
 const client = new kafka.KafkaClient({ kafkaHost: "localhost:9092" });
 const producer = new Producer(client, { requireAcks: 0, partitionerType: 2 });
 
-const produce = async ({ key, messages }) => {
+const produce = async ({ key, message }) => {
   const payload = [
     {
       topic: "kafka-panu-topic",
       key: key,
-      messages: messages,
+      messages: message,
       timestamp: Date.now(),
     },
   ];
