@@ -17,7 +17,7 @@ const io = new Server(server, {
 
 consume((msg) => {
   console.log(msg);
-  //   io.sockets.emit("new-message", { from, to, message });
+  //   io.sockets.emit("get-message", { from, to, message });
 });
 
 io.on("connection", function (socket) {
@@ -26,4 +26,8 @@ io.on("connection", function (socket) {
   socket.on("send-message", ({ message, to }) => {
     produce({ from: socket.id, to, message });
   });
+});
+
+io.listen(5000, () => {
+  console.log("socket.io listening on *:5000");
 });
