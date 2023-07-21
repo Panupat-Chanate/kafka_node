@@ -16,6 +16,7 @@ const io = new Server(server, {
 });
 
 consume((msg) => {
+  console.log(msg);
   io.sockets.emit("get-message", { message: msg });
 });
 
