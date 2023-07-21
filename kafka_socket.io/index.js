@@ -15,17 +15,31 @@ const io = new Server(server, {
   },
 });
 
-consume((msg) => {
-  io.sockets.emit("get-message", { message: msg });
-});
-
-io.on("connection", function (socket) {
-  socket.emit("say-hi", { message: "Chat connected", id: socket.id });
-
-  socket.on("send-message", ({ key, message }) => {
-    produce({ from: socket.id, key, message });
+function connectSocket() {
+  return new Promise((resolve, reject) => {
+    io.on("connection", function (socket) {
+      resolve(socket);
+    });
   });
-});
+}
+
+async function run() {
+  const { socket } = await connectSocket();
+
+  if (socket) {
+    socket.emit("say-hi", { message: "Chat connected", id: socket.id });
+
+    socket.on("send-message", ({ key, message }) => {
+      produce({ from: socket.id, key, message });
+    });
+
+    consume((data) => {
+      io.sockets.emit("get-message", { message: data });
+    });
+  }
+}
+
+run().catch(console.error);
 
 server.listen(5000, () => {
   console.log("socket.io listening on *:5000");
