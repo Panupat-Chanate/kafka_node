@@ -9,7 +9,7 @@ const produce = async ({ key, message }) => {
     {
       topic: "kafka-panu-topic",
       key: key,
-      messages: message,
+      messages: JSON.stringify(message),
       timestamp: Date.now(),
     },
   ];
