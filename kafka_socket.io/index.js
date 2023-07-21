@@ -34,7 +34,7 @@ async function run() {
     });
 
     consume((data) => {
-      io.sockets.emit("get-message", { message: data });
+      socket.emit("get-message", { message: data });
     });
   }
 }
