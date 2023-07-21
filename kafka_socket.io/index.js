@@ -16,7 +16,7 @@ const io = new Server(server, {
 });
 
 consume((msg) => {
-  io.sockets.emit("get-message", { message: msg });
+  io.sockets.emit("getmessage", { message: msg });
 });
 
 io.on("connection", function (socket) {
