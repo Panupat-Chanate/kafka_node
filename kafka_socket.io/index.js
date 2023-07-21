@@ -16,13 +16,12 @@ const io = new Server(server, {
 });
 
 consume((msg) => {
-  console.log(io.sockets);
   io.sockets.emit("get-message", { message: msg });
 });
 
 io.on("connection", function (socket) {
   socket.emit("say-hi", { message: "Chat connected", id: socket.id });
-
+  socket.emit("get-message", { message: 'msg' });
   socket.on("send-message", ({ key, message }) => {
     produce({ from: socket.id, key, message });
   });
