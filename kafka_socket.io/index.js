@@ -1,5 +1,5 @@
-const consume = require("consumer.js");
-const produce = require("producer.js");
+const consume = require("./consumer.js");
+const produce = require("./producer.js");
 
 const http = require("http");
 const server = http.createServer(app);
@@ -14,8 +14,8 @@ const io = new Server(server, {
 });
 
 consume((msg) => {
-    console.log(msg);
-//   io.sockets.emit("new-message", { from, to, message });
+  console.log(msg);
+  //   io.sockets.emit("new-message", { from, to, message });
 });
 
 io.on("connection", function (socket) {
