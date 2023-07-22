@@ -24,10 +24,12 @@ function connectSocket() {
 }
 
 async function run() {
+  console.log("run");
+
   const socket = await connectSocket();
 
   if (socket) {
-    console.log(socket.id);
+    console.log("socket.id: " + socket.id);
 
     socket.emit("say-hi", { message: "Chat connected", id: socket.id });
 
