@@ -19,6 +19,6 @@ const listen = function (topic, consumerGroup) {
   return consumer;
 };
 
-listen("kafka-panu-topic", "g1").on("message", function (msg) {
+listen("kafka-panu-topic", "g1").on("message", async function (msg) {
   console.log("ping", msg);
 });
