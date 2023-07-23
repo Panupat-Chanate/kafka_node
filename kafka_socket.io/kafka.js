@@ -1,6 +1,5 @@
 const kafka = require("kafka-node");
 const express = require("express");
-const port = 5000;
 const app = express();
 
 const Consumer = kafka.Consumer,
@@ -13,10 +12,10 @@ const Consumer = kafka.Consumer,
     }
   );
 
-const server = app.listen(port, () => {
-  console.log(`Listening on port ${server.address().port}`);
-});
-const io = require("socket.io")(server, {
+const http = require("http");
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server, {
   allowEIO3: true,
   cors: {
     origin: true,
@@ -26,6 +25,7 @@ const io = require("socket.io")(server, {
 
 io.on("connection", (client) => {
   console.log("Connected", client);
+
   consumer.on("message", function (message) {
     console.log(message);
     // io.sockets.in(key).emit("getmessage", {
@@ -35,4 +35,8 @@ io.on("connection", (client) => {
   client.on("disconnect", () => {
     console.log("Client disconnected");
   });
+});
+
+server.listen(5000, () => {
+  console.log("socket.io listening on *:5000");
 });
