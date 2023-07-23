@@ -32,13 +32,18 @@ io.on("connection", (socket) => {
     produce({ from: socket.id, key, message });
   });
 
-  socket.on("joinroom", () => {
-    consume((data) => {
-      socket.emit("getmessage", { message: data });
-    });
+  socket.on("joinroom", ({ key }) => {
+    console.log(socket.id + " join");
+    socket.join(key);
+    // consume((data) => {
+    //   socket.emit("getmessage", { message: data });
+    // });
   });
 
-  socket.on("leaveroom", () => {});
+  socket.on("leaveroom", ({ key }) => {
+    console.log(socket.id + " leave");
+    socket.leave(key);
+  });
 });
 
 async function run() {
