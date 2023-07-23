@@ -26,6 +26,7 @@ io.on("connection", (socket) => {
 
   socket.on("joinroom", ({ key }) => {
     console.log(socket.id + " join " + key);
+    console.log(socket.adapter.rooms.get(key).size);
 
     socket.join(key);
 
