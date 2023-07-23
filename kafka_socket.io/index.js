@@ -24,12 +24,13 @@ io.on("connection", (socket) => {
     produce({ from: socket.id, key, message });
   });
 
-  socket.on("joinroom", ({ key }) => {
+  socket.on("joinroom", ({ key, user }) => {
     console.log(socket.id + " join " + key);
 
+    socket.user = user;
     socket.join(key);
 
-    console.log(socket.user);
+    console.log(io.sockets.adapter.rooms.get(key));
 
     socket.emit("getmessage", {
       message:
