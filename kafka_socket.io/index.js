@@ -25,7 +25,13 @@ io.on("connection", (socket) => {
 
     // produce({ from: socket.id, key, message });
 
-    socket.to(socket.id).emit("getmessage", {
+    io.sockets.in(key).emit("getmessage", {
+      message: message.value,
+    });
+    socket.in(key).emit("getmessage", {
+      message: message.value,
+    });
+    socket.to(socket.id).to(key).emit("getmessage", {
       message: message.value,
     });
   });
