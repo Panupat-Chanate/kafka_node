@@ -41,7 +41,7 @@ io.on("connection", (socket) => {
   });
 
   consume((data) => {
-    socket.emit("get-message", { message: data });
+    socket.emit("getmessage", { message: data });
   });
 });
 
