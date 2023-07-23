@@ -26,13 +26,14 @@ function connectSocket() {
 io.on("connection", (socket) => {
   console.log("socket.id: " + socket.id);
 
-  socket.emit("sayhi", { message: "Chat connected", id: socket.id });
+  // socket.emit("sayhi", { message: "Chat connected", id: socket.id });
 
   socket.on("sendmessage", ({ key, message }) => {
     produce({ from: socket.id, key, message });
   });
 
   consume((data) => {
+    socket.emit("sayhi", { message: "Chat connected", id: socket.id });
     socket.emit("getmessage", { message: data });
     console.log("getmessage" + socket.id);
   });
