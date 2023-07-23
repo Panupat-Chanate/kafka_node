@@ -22,13 +22,8 @@ io.on("connection", (socket) => {
 
   socket.on("sendmessage", ({ key, message }) => {
     // produce({ from: socket.id, key, message });
-    socket.emit("getmessage", {
-      message:
-        socket.id +
-        " join " +
-        key +
-        " number of room " +
-        io.sockets.adapter.rooms.get(key).size,
+    io.to(key).socket.emit("getmessage", {
+      message: "producer",
     });
   });
 
