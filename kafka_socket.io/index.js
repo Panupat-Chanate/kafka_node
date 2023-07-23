@@ -37,15 +37,19 @@ io.on("connection", (socket) => {
 
     socket.join(key);
 
-    consume((data) => {
-      socket.emit("getmessage", { message: data });
-    });
+    socket.emit("getmessage", { message: socket.id + " joinroom" });
+
+    // consume((data) => {
+    //   socket.emit("getmessage", { message: data });
+    // });
   });
 
   socket.on("leaveroom", ({ key }) => {
     console.log(socket.id + " leave");
 
     socket.leave(key);
+
+    socket.emit("getmessage", { message: socket.id + " leaveroom" });
   });
 });
 
