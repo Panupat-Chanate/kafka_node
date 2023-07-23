@@ -8,7 +8,7 @@ const client = new kafka.KafkaClient({
 
 const onConsume = ({ topic }, cb) => {
   const consumer = new Consumer(client, [{ topic: topic, partition: 0 }], {
-    autoCommit: true,
+    autoCommit: false,
     fetchMaxWaitMs: 1000,
     fetchMaxBytes: 1024 * 1024,
     encoding: "utf8",
