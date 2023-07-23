@@ -15,7 +15,7 @@ const produce = async ({ key, message }) => {
   ];
 
   producer.send(payload, (error, data) => {
-    console.log("producer: " + data);
+    console.log("producer: " + JSON.stringify(data));
   });
 
   producer.on("error", function (error) {

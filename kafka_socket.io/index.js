@@ -29,8 +29,6 @@ io.on("connection", (socket) => {
   socket.emit("sayhi", { message: "Chat connected", id: socket.id });
 
   socket.on("sendmessage", ({ key, message }) => {
-    console.log(key, message);
-
     produce({ from: socket.id, key, message });
   });
 
