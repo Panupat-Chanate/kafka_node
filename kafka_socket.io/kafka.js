@@ -1,9 +1,15 @@
 const kafka = require("kafka-node");
 const express = require("express");
 const app = express();
+const http = require("http");
+const server = http.createServer(app);
+const { Server } = require("socket.io");
 
 const Consumer = kafka.Consumer,
-  client = new kafka.KafkaClient("localhost:9092"),
+  client = new kafka.KafkaClient({
+    idleConnection: 24 * 60 * 60 * 1000,
+    kafkaHost: "localhost:9092",
+  }),
   consumer = new Consumer(
     client,
     [{ topic: "kafka-panu-topic", partition: 0 }],
@@ -12,9 +18,6 @@ const Consumer = kafka.Consumer,
     }
   );
 
-const http = require("http");
-const server = http.createServer(app);
-const { Server } = require("socket.io");
 const io = new Server(server, {
   allowEIO3: true,
   cors: {
