@@ -33,11 +33,11 @@ io.on("connection", (socket) => {
   });
 
   socket.on("joinroom", ({ key }) => {
-    console.log(socket.id + " join");
+    console.log(socket.id + " join " + key);
 
     socket.join(key);
 
-    socket.emit("getmessage", { message: socket.id + " joinroom" });
+    socket.emit("getmessage", { message: socket.id + " join " + key });
 
     // consume((data) => {
     //   socket.emit("getmessage", { message: data });
@@ -45,11 +45,11 @@ io.on("connection", (socket) => {
   });
 
   socket.on("leaveroom", ({ key }) => {
-    console.log(socket.id + " leave");
+    console.log(socket.id + " leave " + key);
 
     socket.leave(key);
 
-    socket.emit("getmessage", { message: socket.id + " leaveroom" });
+    socket.emit("getmessage", { message: socket.id + " leave " + key });
   });
 });
 
