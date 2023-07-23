@@ -5,10 +5,9 @@ const client = new kafka.KafkaClient({
   idleConnection: 24 * 60 * 60 * 1000,
   kafkaHost: "localhost:9092",
 });
-var consumer;
 
 const onConsume = ({ topic }, cb) => {
-  consumer = new Consumer(client, [{ topic: topic, partition: 0 }], {
+  const consumer = new Consumer(client, [{ topic: topic, partition: 0 }], {
     autoCommit: true,
     fetchMaxWaitMs: 1000,
     fetchMaxBytes: 1024 * 1024,
@@ -26,9 +25,9 @@ const onConsume = ({ topic }, cb) => {
 };
 
 const closeConsume = ({ topic }, cb) => {
-  consumer.close(true, function (message) {
-    cb(message);
-  });
+  // consumer.close(true, function (message) {
+  //   cb(message);
+  // });
 };
 
 module.exports = { onConsume, closeConsume };
