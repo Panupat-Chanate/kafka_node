@@ -24,7 +24,25 @@ function connectSocket() {
 }
 
 io.on("connection", (socket) => {
-  console.log("a user connected" + socket.id);
+  console.log("socket.id: " + socket.id);
+
+  socket.emit("say-hi", { message: "Chat connected", id: socket.id });
+
+  // socket.on("join", (room) => {
+  //   console.log(`Socket ${socket.id} joining ${room}`);
+
+  //   socket.join(room);
+  // });
+
+  socket.on("send-message", ({ key, message }) => {
+    console.log(key, message);
+
+    produce({ from: socket.id, key, message });
+  });
+
+  consume((data) => {
+    socket.emit("get-message", { message: data });
+  });
 });
 
 async function run() {
@@ -36,12 +54,6 @@ async function run() {
     console.log("socket.id: " + socket.id);
 
     socket.emit("say-hi", { message: "Chat connected", id: socket.id });
-
-    // socket.on("join", (room) => {
-    //   console.log(`Socket ${socket.id} joining ${room}`);
-
-    //   socket.join(room);
-    // });
 
     socket.on("send-message", ({ key, message }) => {
       console.log(key, message);
