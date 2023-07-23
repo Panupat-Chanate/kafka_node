@@ -14,7 +14,7 @@ const Consumer = kafka.Consumer,
     client,
     [{ topic: "kafka-panu-topic", partition: 0 }],
     {
-      autoCommit: false,
+      autoCommit: true,
       fetchMaxWaitMs: 1000,
       fetchMaxBytes: 1024 * 1024,
       encoding: "utf8",
@@ -32,13 +32,10 @@ const io = new Server(server, {
 });
 
 io.on("connection", (client) => {
-  console.log("Connected", client);
+  console.log("Connected");
 
   consumer.on("message", function (message) {
     console.log(message);
-    // io.sockets.in(key).emit("getmessage", {
-    //   message: data,
-    // });
   });
   client.on("disconnect", () => {
     console.log("Client disconnected");
