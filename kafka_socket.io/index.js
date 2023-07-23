@@ -34,6 +34,7 @@ io.on("connection", (socket) => {
 
   consume((data) => {
     socket.emit("getmessage", { message: data });
+    console.log(data);
   });
 });
 
