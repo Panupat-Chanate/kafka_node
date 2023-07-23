@@ -1,4 +1,4 @@
-const { onConsume, closeConsume } = require("./consumer.js");
+const consumer = require("./consumer.js");
 const produce = require("./producer.js");
 
 const express = require("express");
@@ -40,7 +40,7 @@ io.on("connection", (socket) => {
         io.sockets.adapter.rooms.get(key).size,
     });
 
-    onConsume({ topic }, (data) => {
+    consumer.onConsume({ topic }, (data) => {
       if (key === data.key) {
         io.sockets.in(key).emit("getmessage", {
           message: data,
@@ -56,8 +56,8 @@ io.on("connection", (socket) => {
 
     socket.emit("getmessage", { message: socket.id + " leave " + key });
 
-    closeConsume({ topic: true }, (error, message) => {
-      console.log(error, message);
+    consumer.closeConsume({ topic: true }, (message) => {
+      console.log("kafka close " + message);
     });
   });
 });

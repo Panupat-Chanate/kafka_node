@@ -26,8 +26,8 @@ const onConsume = ({ topic }, cb) => {
 };
 
 const closeConsume = ({ topic }, cb) => {
-  consumer.close(true, function (error, message) {
-    cb(error, message);
+  consumer.close(true, function (message) {
+    cb(message);
   });
 };
 
