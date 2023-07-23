@@ -30,7 +30,9 @@ io.on("connection", (socket) => {
     socket.join(key);
     console.log(io.sockets.adapter.rooms.get(key).size);
 
-    socket.emit("getmessage", { message: socket.id + " join " + key });
+    socket.emit("getmessage", {
+      message: socket.id + " join " + key,
+    });
 
     // consume((data) => {
     //   socket.emit("getmessage", { message: data });
@@ -41,6 +43,7 @@ io.on("connection", (socket) => {
     console.log(socket.id + " leave " + key);
 
     socket.leave(key);
+    console.log(io.sockets.adapter.rooms.get(key).size);
 
     socket.emit("getmessage", { message: socket.id + " leave " + key });
   });
