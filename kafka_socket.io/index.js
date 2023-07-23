@@ -21,7 +21,7 @@ io.on("connection", (socket) => {
   socket.emit("sayhi", { message: "sayhi", id: socket.id });
 
   socket.on("sendmessage", ({ key, message }) => {
-    console.log("key " + key);
+    console.log(socket.id + " send to " + key);
 
     // produce({ from: socket.id, key, message });
 
