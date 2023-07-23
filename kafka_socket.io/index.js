@@ -34,14 +34,17 @@ io.on("connection", (socket) => {
 
   socket.on("joinroom", ({ key }) => {
     console.log(socket.id + " join");
+
     socket.join(key);
-    // consume((data) => {
-    //   socket.emit("getmessage", { message: data });
-    // });
+
+    consume((data) => {
+      socket.emit("getmessage", { message: data });
+    });
   });
 
   socket.on("leaveroom", ({ key }) => {
     console.log(socket.id + " leave");
+
     socket.leave(key);
   });
 });
