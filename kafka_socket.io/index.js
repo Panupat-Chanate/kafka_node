@@ -26,15 +26,9 @@ function connectSocket() {
 io.on("connection", (socket) => {
   console.log("socket.id: " + socket.id);
 
-  socket.emit("say-hi", { message: "Chat connected", id: socket.id });
+  socket.emit("sayhi", { message: "Chat connected", id: socket.id });
 
-  // socket.on("join", (room) => {
-  //   console.log(`Socket ${socket.id} joining ${room}`);
-
-  //   socket.join(room);
-  // });
-
-  socket.on("send-message", ({ key, message }) => {
+  socket.on("sendmessage", ({ key, message }) => {
     console.log(key, message);
 
     produce({ from: socket.id, key, message });
