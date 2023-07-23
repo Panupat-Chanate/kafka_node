@@ -29,7 +29,7 @@ io.on("connection", (socket) => {
 
     socket.join(key);
 
-    console.log(io.sockets.adapter.rooms.get(key));
+    console.log(socket.user);
 
     socket.emit("getmessage", {
       message:
