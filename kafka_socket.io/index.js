@@ -41,7 +41,6 @@ io.on("connection", (socket) => {
     });
 
     consume({ topic }, (data) => {
-      console.log(data);
       if (key === data.key) {
         io.sockets.in(key).emit("getmessage", {
           message: data,
