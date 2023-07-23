@@ -38,7 +38,8 @@ io.on("connection", (socket) => {
     socket.join(key);
 
     consume((data) => {
-      socket.emit("getmessage", { message: data });
+      socket.to(key).emit("getmessage", { message: data });
+      // socket.emit("getmessage", { message: data });
     });
   });
 
