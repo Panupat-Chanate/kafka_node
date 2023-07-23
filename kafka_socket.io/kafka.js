@@ -23,6 +23,10 @@ const Consumer = kafka.Consumer,
     }
   );
 
+server.listen(5000, () => {
+  console.log("socket.io listening on *:5000");
+});
+
 const io = new Server(server, {
   allowEIO3: true,
   cors: {
@@ -40,8 +44,4 @@ io.on("connection", (client) => {
   client.on("disconnect", () => {
     console.log("Client disconnected");
   });
-});
-
-server.listen(5000, () => {
-  console.log("socket.io listening on *:5000");
 });
