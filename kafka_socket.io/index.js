@@ -38,8 +38,9 @@ io.on("connection", (socket) => {
         socket.id +
         " join " +
         key +
-        " number of room " +
-        io.sockets.adapter.rooms.get(key).size,
+        " number of room " 
+        // +
+        // io.sockets.adapter.rooms.get(key).size,
     });
 
     // consume((data) => {
