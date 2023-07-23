@@ -29,6 +29,8 @@ io.on("connection", (socket) => {
 
     socket.join(key);
 
+    console.log(io.sockets.adapter.rooms.get(key));
+
     socket.emit("getmessage", {
       message:
         socket.id +
