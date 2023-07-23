@@ -43,7 +43,6 @@ io.on("connection", (socket) => {
     console.log(socket.id + " leave " + key);
 
     socket.leave(key);
-    console.log(io.sockets.adapter.rooms?.get(key)?.size || 0);
 
     socket.emit("getmessage", { message: socket.id + " leave " + key });
   });
