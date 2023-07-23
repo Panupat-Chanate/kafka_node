@@ -23,16 +23,10 @@ io.on("connection", (socket) => {
   socket.on("sendmessage", ({ key, message }) => {
     console.log(socket.id + " send to " + key);
 
-    // produce({ from: socket.id, key, message });
-
-    // socket.in(key).emit
-    // socket.to(socket.id).to(key).emit
-    io.sockets.in(key).emit("getmessage", {
-      message: message.value,
-    });
+    produce({ from: socket.id, topic, key, message });
   });
 
-  socket.on("joinroom", ({ key }) => {
+  socket.on("joinroom", ({ topic, key }) => {
     console.log(socket.id + " join " + key);
 
     socket.join(key);
@@ -46,11 +40,12 @@ io.on("connection", (socket) => {
         io.sockets.adapter.rooms.get(key).size,
     });
 
-    consume((data) => {
-      // socket.emit("getmessage", { message: data });
-      io.sockets.in(key).emit("getmessage", {
-        message: data,
-      });
+    consume({ topic }, (data) => {
+      if (key === data.key) {
+        io.sockets.in(key).emit("getmessage", {
+          message: data,
+        });
+      }
     });
   });
 
@@ -66,3 +61,11 @@ io.on("connection", (socket) => {
 server.listen(5000, () => {
   console.log("socket.io listening on *:5000");
 });
+
+// note
+// socket.in(key).emit
+// socket.to(socket.id).to(key).emit
+// io.sockets.in(key).emit("getmessage", {
+//   message: message.value,
+// });
+// socket.emit("getmessage", { message: data });

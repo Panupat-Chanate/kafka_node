@@ -6,18 +6,14 @@ const client = new kafka.KafkaClient({
   kafkaHost: "localhost:9092",
 });
 
-const consume = (cb) => {
-  const consumer = new Consumer(
-    client,
-    [{ topic: "kafka-panu-topic", partition: 0 }],
-    {
-      autoCommit: true,
-      fetchMaxWaitMs: 1000,
-      fetchMaxBytes: 1024 * 1024,
-      encoding: "utf8",
-      fromOffset: true,
-    }
-  );
+const consume = (topic, cb) => {
+  const consumer = new Consumer(client, [{ topic: topic, partition: 0 }], {
+    autoCommit: true,
+    fetchMaxWaitMs: 1000,
+    fetchMaxBytes: 1024 * 1024,
+    encoding: "utf8",
+    fromOffset: true,
+  });
 
   consumer.on("message", async function (message) {
     cb(message);
