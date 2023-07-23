@@ -1,19 +1,38 @@
 const kafka = require("kafka-node");
-const Consumer = kafka.Consumer;
-const client = new kafka.KafkaClient({
-  idleConnection: 24 * 60 * 60 * 1000,
-  kafkaHost: "localhost:9092",
+const express = require("express");
+const port = 3000;
+const app = express();
+
+const Consumer = kafka.Consumer,
+  client = new kafka.KafkaClient("localhost:9092"),
+  consumer = new Consumer(
+    client,
+    [{ topic: "kafka-panu-topic", partition: 0 }],
+    {
+      autoCommit: false,
+    }
+  );
+
+const server = app.listen(port, () => {
+  console.log(`Listening on port ${server.address().port}`);
 });
-const consumer = new Consumer(client, [{ topic: "kafka-panu-topic", partition: 0 }], {
-  autoCommit: true,
-  fetchMaxWaitMs: 1000,
-  fetchMaxBytes: 1024 * 1024,
-  encoding: "utf8",
-  fromOffset: true,
+const io = require("socket.io")(server, {
+  allowEIO3: true,
+  cors: {
+    origin: true,
+    credentials: true,
+  },
 });
 
-exports.init = (cb) => {
-  consumer.on("message", async function (message) {
-    cb(message);
+io.on("connection", (client) => {
+  console.log("Connected", client);
+  consumer.on("message", function (message) {
+    console.log(message);
+    // io.sockets.in(key).emit("getmessage", {
+    //   message: data,
+    // });
   });
-};
+  client.on("disconnect", () => {
+    console.log("Client disconnected");
+  });
+});
