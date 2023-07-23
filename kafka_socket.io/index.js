@@ -27,7 +27,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("joinroom", ({ topic, key }) => {
-    console.log(socket.id + " join " + key);
+    // console.log(socket.id + " join " + key);
 
     socket.join(key);
 
@@ -50,7 +50,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("leaveroom", ({ key }) => {
-    console.log(socket.id + " leave " + key);
+    // console.log(socket.id + " leave " + key);
 
     socket.leave(key);
 
