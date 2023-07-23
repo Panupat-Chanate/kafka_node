@@ -26,19 +26,19 @@ const io = new Server(server, {
   },
 });
 
-// io.on("connection", (client) => {
-//   console.log("Connected", client);
+io.on("connection", (client) => {
+  console.log("Connected", client);
 
-//   consumer.on("message", function (message) {
-//     console.log(message);
-//     // io.sockets.in(key).emit("getmessage", {
-//     //   message: data,
-//     // });
-//   });
-//   client.on("disconnect", () => {
-//     console.log("Client disconnected");
-//   });
-// });
+  consumer.on("message", function (message) {
+    console.log(message);
+    // io.sockets.in(key).emit("getmessage", {
+    //   message: data,
+    // });
+  });
+  client.on("disconnect", () => {
+    console.log("Client disconnected");
+  });
+});
 
 server.listen(5000, () => {
   console.log("socket.io listening on *:5000");
