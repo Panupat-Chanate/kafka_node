@@ -6,7 +6,6 @@ const app = express();
 const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
-const kafka = require("./kafka.js");
 
 const io = new Server(server, {
   allowEIO3: true,
@@ -40,14 +39,6 @@ io.on("connection", (socket) => {
         " number of room " +
         io.sockets.adapter.rooms.get(key).size,
     });
-
-    // kafka.init({ topic }, (data) => {
-    //   if (key === data.key) {
-    //     io.sockets.in(key).emit("getmessage", {
-    //       message: data,
-    //     });
-    //   }
-    // });
 
     consumer.onConsume({ topic }, (data) => {
       if (key === data.key) {
