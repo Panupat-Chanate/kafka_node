@@ -21,9 +21,11 @@ io.on("connection", (socket) => {
   socket.emit("sayhi", { message: "sayhi", id: socket.id });
 
   socket.on("sendmessage", ({ key, message }) => {
+    console.log("key " + key);
+
     // produce({ from: socket.id, key, message });
 
-    socket.emit("getmessage", {
+    socket.to(key).emit("getmessage", {
       message: message.value,
     });
   });
@@ -31,16 +33,15 @@ io.on("connection", (socket) => {
   socket.on("joinroom", ({ key }) => {
     console.log(socket.id + " join " + key);
 
-    // socket.join(key);
+    socket.join(key);
 
     socket.emit("getmessage", {
       message:
         socket.id +
         " join " +
         key +
-        " number of room " 
-        // +
-        // io.sockets.adapter.rooms.get(key).size,
+        " number of room " +
+        io.sockets.adapter.rooms.get(key).size,
     });
 
     // consume((data) => {
@@ -51,7 +52,7 @@ io.on("connection", (socket) => {
   socket.on("leaveroom", ({ key }) => {
     console.log(socket.id + " leave " + key);
 
-    // socket.leave(key);
+    socket.leave(key);
 
     socket.emit("getmessage", { message: socket.id + " leave " + key });
   });
