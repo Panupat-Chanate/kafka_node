@@ -26,17 +26,15 @@ function connectSocket() {
 io.on("connection", (socket) => {
   console.log("socket.id: " + socket.id);
 
-  // socket.emit("sayhi", { message: "Chat connected", id: socket.id });
+  socket.emit("sayhi", { message: "sayhi", id: socket.id });
 
   socket.on("sendmessage", ({ key, message }) => {
     produce({ from: socket.id, key, message });
   });
 
-  consume((data) => {
-    socket.emit("sayhi", { message: "Chat connected", id: socket.id });
-    socket.emit("getmessage", { message: data });
-    console.log("getmessage" + socket.id);
-  });
+  // consume((data) => {
+  //   socket.emit("getmessage", { message: data });
+  // });
 });
 
 async function run() {
@@ -63,6 +61,6 @@ async function run() {
 
 // run().catch(console.error);
 
-server.listen(5000, () => {
+server.listen(5001, () => {
   console.log("socket.io listening on *:5000");
 });
