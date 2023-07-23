@@ -22,16 +22,16 @@ io.on("connection", (socket) => {
 
   socket.on("sendmessage", ({ key, message }) => {
     // produce({ from: socket.id, key, message });
-    socket.emit("getmessage", {
+
+    socket.to(key).emit("getmessage", {
       message: message.value,
     });
   });
 
-  socket.on("joinroom", ({ key, user }) => {
+  socket.on("joinroom", ({ key }) => {
     console.log(socket.id + " join " + key);
 
-    socket.user = user;
-    socket.join(key);
+    // socket.join(key);
 
     socket.emit("getmessage", {
       message:
@@ -50,7 +50,7 @@ io.on("connection", (socket) => {
   socket.on("leaveroom", ({ key }) => {
     console.log(socket.id + " leave " + key);
 
-    socket.leave(key);
+    // socket.leave(key);
 
     socket.emit("getmessage", { message: socket.id + " leave " + key });
   });
