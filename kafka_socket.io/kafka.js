@@ -1,5 +1,10 @@
 "use strict";
 const kafka = require("kafka-node");
+const express = require("express");
+const app = express();
+const http = require("http");
+const server = http.createServer(app);
+const { Server } = require("socket.io");
 
 const Consumer = kafka.Consumer;
 const client = new kafka.KafkaClient({
@@ -18,6 +23,10 @@ const listen = function (topic, consumerGroup) {
   });
   return consumer;
 };
+
+server.listen(5000, () => {
+  console.log("socket.io listening on *:5000");
+});
 
 listen("kafka-panu-topic", "g1").on("message", async function (msg) {
   console.log("ping", msg);
