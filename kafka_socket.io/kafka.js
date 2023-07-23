@@ -15,6 +15,11 @@ const Consumer = kafka.Consumer,
     [{ topic: "kafka-panu-topic", partition: 0 }],
     {
       autoCommit: false,
+      fetchMaxWaitMs: 1000,
+      fetchMaxBytes: 1024 * 1024,
+      encoding: "utf8",
+      fromOffset: true,
+      keyEncoding: "utf8",
     }
   );
 
