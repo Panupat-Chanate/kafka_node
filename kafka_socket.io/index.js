@@ -22,7 +22,7 @@ io.on("connection", (socket) => {
 
   socket.on("sendmessage", ({ key, message }) => {
     // produce({ from: socket.id, key, message });
-    io.to(key).socket.emit("getmessage", {
+    socket.to(key).emit("getmessage", {
       message: "producer",
     });
   });
