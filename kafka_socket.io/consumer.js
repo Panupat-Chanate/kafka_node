@@ -6,7 +6,7 @@ const client = new kafka.KafkaClient({
   kafkaHost: "localhost:9092",
 });
 
-const consume = (topic, cb) => {
+const consume = ({ topic }, cb) => {
   const consumer = new Consumer(client, [{ topic: topic, partition: 0 }], {
     autoCommit: true,
     fetchMaxWaitMs: 1000,
