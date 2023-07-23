@@ -1,4 +1,4 @@
-const consume = require("./consumer.js");
+const { onConsume, closeConsume } = require("./consumer.js");
 const produce = require("./producer.js");
 
 const express = require("express");
@@ -40,7 +40,7 @@ io.on("connection", (socket) => {
         io.sockets.adapter.rooms.get(key).size,
     });
 
-    consume({ topic }, (data) => {
+    onConsume({ topic }, (data) => {
       if (key === data.key) {
         io.sockets.in(key).emit("getmessage", {
           message: data,
@@ -55,6 +55,10 @@ io.on("connection", (socket) => {
     socket.leave(key);
 
     socket.emit("getmessage", { message: socket.id + " leave " + key });
+
+    closeConsume({ topic }, (error, message) => {
+      console.log(error, message);
+    });
   });
 });
 
