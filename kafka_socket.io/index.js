@@ -23,6 +23,10 @@ function connectSocket() {
   });
 }
 
+io.on("connection", (socket) => {
+  console.log("a user connected" + socket.id);
+});
+
 async function run() {
   console.log("run");
 
@@ -32,6 +36,12 @@ async function run() {
     console.log("socket.id: " + socket.id);
 
     socket.emit("say-hi", { message: "Chat connected", id: socket.id });
+
+    // socket.on("join", (room) => {
+    //   console.log(`Socket ${socket.id} joining ${room}`);
+
+    //   socket.join(room);
+    // });
 
     socket.on("send-message", ({ key, message }) => {
       console.log(key, message);
@@ -45,7 +55,7 @@ async function run() {
   }
 }
 
-run().catch(console.error);
+// run().catch(console.error);
 
 server.listen(5000, () => {
   console.log("socket.io listening on *:5000");
