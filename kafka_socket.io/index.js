@@ -56,7 +56,7 @@ io.on("connection", (socket) => {
 
     socket.emit("getmessage", { message: socket.id + " leave " + key });
 
-    closeConsume({ topic }, (error, message) => {
+    closeConsume({ topic: true }, (error, message) => {
       console.log(error, message);
     });
   });
