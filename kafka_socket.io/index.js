@@ -41,21 +41,21 @@ io.on("connection", (socket) => {
         io.sockets.adapter.rooms.get(key).size,
     });
 
-    kafka.init({ topic }, (data) => {
-      if (key === data.key) {
-        io.sockets.in(key).emit("getmessage", {
-          message: data,
-        });
-      }
-    });
-
-    // consumer.onConsume({ topic }, (data) => {
+    // kafka.init({ topic }, (data) => {
     //   if (key === data.key) {
     //     io.sockets.in(key).emit("getmessage", {
     //       message: data,
     //     });
     //   }
     // });
+
+    consumer.onConsume({ topic }, (data) => {
+      if (key === data.key) {
+        io.sockets.in(key).emit("getmessage", {
+          message: data,
+        });
+      }
+    });
   });
 
   socket.on("leaveroom", ({ key }) => {
