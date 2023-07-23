@@ -25,15 +25,11 @@ io.on("connection", (socket) => {
 
     // produce({ from: socket.id, key, message });
 
+    // socket.in(key).emit
+    // socket.to(socket.id).to(key).emit
     io.sockets.in(key).emit("getmessage", {
       message: message.value,
     });
-    // socket.in(key).emit("getmessage", {
-    //   message: message.value,
-    // });
-    // socket.to(socket.id).to(key).emit("getmessage", {
-    //   message: message.value,
-    // });
   });
 
   socket.on("joinroom", ({ key }) => {
@@ -50,9 +46,12 @@ io.on("connection", (socket) => {
         io.sockets.adapter.rooms.get(key).size,
     });
 
-    // consume((data) => {
-    //   socket.emit("getmessage", { message: data });
-    // });
+    consume((data) => {
+      // socket.emit("getmessage", { message: data });
+      io.sockets.in(key).emit("getmessage", {
+        message: data,
+      });
+    });
   });
 
   socket.on("leaveroom", ({ key }) => {
