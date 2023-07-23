@@ -22,8 +22,8 @@ io.on("connection", (socket) => {
 
   socket.on("sendmessage", ({ key, message }) => {
     // produce({ from: socket.id, key, message });
-    socket.to(key).emit("getmessage", {
-      message: "producer",
+    socket.emit("getmessage", {
+      message: message.value,
     });
   });
 
