@@ -34,6 +34,8 @@ async function run() {
     socket.emit("say-hi", { message: "Chat connected", id: socket.id });
 
     socket.on("send-message", ({ key, message }) => {
+      console.log(key, message);
+
       produce({ from: socket.id, key, message });
     });
 
