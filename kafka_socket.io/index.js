@@ -21,7 +21,15 @@ io.on("connection", (socket) => {
   socket.emit("sayhi", { message: "sayhi", id: socket.id });
 
   socket.on("sendmessage", ({ key, message }) => {
-    produce({ from: socket.id, key, message });
+    // produce({ from: socket.id, key, message });
+    socket.emit("getmessage", {
+      message:
+        socket.id +
+        " join " +
+        key +
+        " number of room " +
+        io.sockets.adapter.rooms.get(key).size,
+    });
   });
 
   socket.on("joinroom", ({ key, user }) => {
@@ -29,8 +37,6 @@ io.on("connection", (socket) => {
 
     socket.user = user;
     socket.join(key);
-
-    console.log(io.sockets.adapter.rooms.get(key), socket.user);
 
     socket.emit("getmessage", {
       message:
