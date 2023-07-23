@@ -32,9 +32,13 @@ io.on("connection", (socket) => {
     produce({ from: socket.id, key, message });
   });
 
-  // consume((data) => {
-  //   socket.emit("getmessage", { message: data });
-  // });
+  socket.on("joinroom", () => {
+    consume((data) => {
+      socket.emit("getmessage", { message: data });
+    });
+  });
+
+  socket.on("leaveroom", () => {});
 });
 
 async function run() {
