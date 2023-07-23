@@ -21,13 +21,13 @@ io.on("connection", (socket) => {
   socket.emit("sayhi", { message: "sayhi", id: socket.id });
 
   socket.on("sendmessage", ({ key, message }) => {
-    console.log(socket.id + " send to " + key);
+    console.log(socket.id + " send to " + key,topic);
 
     produce({ from: socket.id, topic, key, message });
   });
 
   socket.on("joinroom", ({ topic, key }) => {
-    console.log(socket.id + " join " + key);
+    console.log(socket.id + " join " + key,topic);
 
     socket.join(key);
 
