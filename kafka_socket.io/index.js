@@ -41,7 +41,7 @@ io.on("connection", (socket) => {
         io.sockets.adapter.rooms.get(key).size,
     });
 
-    kafka.init((data) => {
+    kafka.init({ topic }, (data) => {
       if (key === data.key) {
         io.sockets.in(key).emit("getmessage", {
           message: data,
