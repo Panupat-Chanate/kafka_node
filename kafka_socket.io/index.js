@@ -42,7 +42,7 @@ io.on("connection", (socket) => {
 
     consumer.onConsume({ topic, socket: socket.id }, (data) => {
       if (key === data.key) {
-        io.sockets.in(key).emit("getmessage", {
+        io.sockets.to(socket.id).emit("getmessage", {
           message: data,
         });
       }
