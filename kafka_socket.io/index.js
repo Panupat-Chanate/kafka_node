@@ -62,7 +62,7 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(5000, () => {
+server.listen(process.argv[2], () => {
   console.log("socket.io listening on *:5000");
 });
 
