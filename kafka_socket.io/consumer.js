@@ -20,8 +20,8 @@ const onConsume = ({ topic }, cb) => {
 
   consumer.on("message", async function (message) {
     console.log(message);
+    consumer.close();
     cb(message);
-    // consumer.close();
   });
 
   consumer.on("error", function (error) {
