@@ -24,9 +24,9 @@ io.on("connection", (socket) => {
     console.log(socket.id + " send to " + key);
 
     produce({ from: socket.id, topic, key, message });
-    
+
     callback({
-      ok: true,
+      status: "ok"
     });
   });
 
