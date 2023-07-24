@@ -20,10 +20,14 @@ io.on("connection", (socket) => {
 
   socket.emit("sayhi", { message: "sayhi", id: socket.id });
 
-  socket.on("sendmessage", ({ topic, key, message }) => {
+  socket.on("sendmessage", ({ topic, key, message, callback }) => {
     console.log(socket.id + " send to " + key);
 
     produce({ from: socket.id, topic, key, message });
+    
+    callback({
+      ok: true,
+    });
   });
 
   socket.on("joinroom", ({ topic, key }) => {
