@@ -23,8 +23,6 @@ const onConsume = ({ topic }, cb) => {
     cb(message);
   });
 
-  consumer.close();
-
   consumer.on("error", function (error) {
     console.log("error", error);
   });
