@@ -31,3 +31,7 @@ server.listen(5000, () => {
 listen("kafka-panu-topic", "g1").on("message", async function (msg) {
   console.log("ping", msg);
 });
+
+listen("kafka-panu-topic", "g1").on("message", async function (msg) {
+  console.log("ping2", msg);
+});
