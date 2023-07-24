@@ -26,7 +26,7 @@ io.on("connection", (socket) => {
     produce({ from: socket.id, topic, key, message });
 
     callback({
-      ok: "ok",
+      ok: true,
     });
   });
 
