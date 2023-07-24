@@ -15,10 +15,7 @@ const onConsume = ({ topic }, cb) => {
     keyEncoding: "utf8",
   });
 
-  console.log(consumer);
-
   consumer.on("message", async function (message) {
-    console.log(message);
     cb(message);
   });
 
