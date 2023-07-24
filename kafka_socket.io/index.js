@@ -40,7 +40,7 @@ io.on("connection", (socket) => {
         io.sockets.adapter.rooms.get(key).size,
     });
 
-    consumer.onConsume({ topic }, (data) => {
+    consumer.onConsume({ topic, socket: socket.id }, (data) => {
       if (key === data.key) {
         io.sockets.in(key).emit("getmessage", {
           message: data,

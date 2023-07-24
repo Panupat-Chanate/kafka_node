@@ -1,10 +1,11 @@
 const kafka = require("kafka-node");
 
-const onConsume = ({ topic }, cb) => {
+const onConsume = ({ topic, socketid }, cb) => {
   const Consumer = kafka.Consumer;
   const client = new kafka.KafkaClient({
     idleConnection: 24 * 60 * 60 * 1000,
     kafkaHost: "localhost:9092",
+    groupId: socketid,
   });
   const consumer = new Consumer(client, [{ topic: topic, partition: 0 }], {
     autoCommit: true,
