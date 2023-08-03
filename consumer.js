@@ -1,6 +1,6 @@
 const kafka = require("kafka-node");
 
-const onConsume = async ({ topic, socketid }, cb) => {
+const consumer = async ({ topic, socketid }, cb) => {
   const Consumer = kafka.Consumer;
   const client = new kafka.KafkaClient({
     idleConnection: 24 * 60 * 60 * 1000,
@@ -25,4 +25,4 @@ const onConsume = async ({ topic, socketid }, cb) => {
   });
 };
 
-module.exports = onConsume;
+module.exports = consumer;
