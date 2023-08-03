@@ -1,35 +1,33 @@
-const Kafka = require("kafka-node");
-const config = require("./config");
+const kafka = require("kafka-node");
 
-const Producer = Kafka.Producer;
-const client = new Kafka.KafkaClient({ kafkaHost: config.KafkaHost });
+const Producer = kafka.Producer;
+const client = new kafka.KafkaClient({ kafkaHost: "localhost:9092" });
 const producer = new Producer(client, { requireAcks: 0, partitionerType: 2 });
 
-const pushDataToKafka = (dataToPush) => {
-  try {
-    let payloadToKafkaTopic = [
-      {
-        topic: config.KafkaTopic,
-        key: 515,
-        messages: JSON.stringify(dataToPush[0].value),
-        timestamp: Date.now(),
-      },
-    ];
+const produce = async ({ topic, key, message }) => {
+  // const payload = [
+  //   {
+  //     topic: topic,
+  //     key: key,
+  //     messages: JSON.stringify(message),
+  //     timestamp: message.timestamp,
+  //   },
+  // ];
 
-    producer.on("ready", async function () {
-      producer.send(payloadToKafkaTopic, (err, data) => {
-        console.log("data: ", data);
-      });
+  const payload = message.map((x) => ({
+    topic: topic,
+    key: key,
+    messages: JSON.stringify(x),
+    timestamp: message.timestamp,
+  }));
 
-      producer.on("error", function (err) {
-        //  handle error cases here
-      });
-    });
-  } catch (error) {
-    console.log(error);
-  }
+  producer.send(payload, (error, data) => {
+    console.log("producer: " + JSON.stringify(data));
+  });
+
+  producer.on("error", function (error) {
+    console.log("error", error);
+  });
 };
 
-const jsonData = require("./app_json.js");
-
-pushDataToKafka(jsonData);
+module.exports = produce;

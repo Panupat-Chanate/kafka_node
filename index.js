@@ -1,27 +1,11 @@
-const kafka = require("kafka-node");
-const config = require("./config");
+const consumer = require("./consumer.js");
+const produce = require("./producer.js");
+
 const express = require("express");
 const app = express();
 const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
-var bodyParser = require("body-parser");
-const cors = require("cors");
-
-var CONSUMER_RUNNING = true;
-var FOCUS_KEY;
-
-const Producer = kafka.Producer;
-const client = new kafka.KafkaClient({ kafkaHost: config.KafkaHost });
-const producer = new Producer(client, { requireAcks: 0, partitionerType: 2 });
-
-app.use(cors());
-app.use(bodyParser.json());
-app.use(
-  bodyParser.urlencoded({
-    extended: true,
-  })
-);
 
 const io = new Server(server, {
   allowEIO3: true,
@@ -31,94 +15,61 @@ const io = new Server(server, {
   },
 });
 
-io.on("connection", async (socket) => {
-  console.log("socket.io connected");
+io.on("connection", (socket) => {
+  console.log("socket.id: " + socket.id);
 
-  // const userId = await fetchUserId(socket);
+  socket.emit("sayhi", { message: "sayhi", id: socket.id });
 
-  // socket.join(userId);
-  // io.to(userId).emit("hi");
+  socket.on("sendmessage", ({ topic, key, message }) => {
+    console.log(socket.id + " send to " + key);
 
-  socket.on("disconnect", () => {
-    console.log("socket.io disconnected");
+    produce({ from: socket.id, topic, key, message });
+  });
 
-    // CONSUMER_RUNNING = true;
+  socket.on("joinroom", ({ topic, key }) => {
+    // console.log(socket.id + " join " + key);
+
+    socket.join(key);
+
+    socket.emit("getmessage", {
+      message:
+        socket.id +
+        " join " +
+        key +
+        " number of room " +
+        io.sockets.adapter.rooms.get(key).size,
+    });
+
+    consumer.onConsume({ topic, socket: socket.id }, (data) => {
+      if (key === data.key) {
+        io.sockets.to(socket.id).emit("getmessage", {
+          message: data,
+        });
+      }
+    });
+  });
+
+  socket.on("leaveroom", ({ key }) => {
+    // console.log(socket.id + " leave " + key);
+
+    socket.leave(key);
+
+    socket.emit("getmessage", { message: socket.id + " leave " + key });
+
+    consumer.closeConsume({ topic: true }, (message) => {
+      console.log("kafka close " + message);
+    });
   });
 });
 
-app.post("/producer", async (req, res) => {
-  try {
-    let payload = [
-      {
-        topic: req.body.body.topic,
-        key: req.body.body.key,
-        messages: JSON.stringify(req.body.body.value),
-      },
-    ];
-
-    producer.send(payload, (error, data) => {
-      console.log("data: ", data);
-
-      if (!error) {
-        res.json({ ok: true, message: data });
-      } else {
-        res.json({ ok: false, message: error });
-      }
-    });
-
-    producer.on("error", function (error) {
-      res.json({ ok: false, message: error });
-    });
-  } catch (error) {
-    res.json({ ok: false, message: error });
-  }
+server.listen(process.argv[2], () => {
+  console.log("socket.io listening on *:" + process.argv[2]);
 });
 
-app.post("/consumer", async (req, res) => {
-  try {
-    if (FOCUS_KEY !== req.body.body) {
-      CONSUMER_RUNNING = true;
-    }
-
-    if (CONSUMER_RUNNING) {
-      const Consumer = kafka.Consumer;
-      const client = new kafka.KafkaClient({
-        idleConnection: 24 * 60 * 60 * 1000,
-        kafkaHost: config.KafkaHost,
-      });
-
-      let consumer = new Consumer(
-        client,
-        [{ topic: req.body.body.topic, key: req.body.body.key, partition: 0 }],
-        {
-          autoCommit: true,
-          fetchMaxWaitMs: 1000,
-          fetchMaxBytes: 1024 * 1024,
-          encoding: "utf8",
-          fromOffset: true,
-          keyEncoding: "utf8",
-        }
-      );
-      consumer.on("message", async function (message) {
-        console.log("data: ", message);
-
-        if (message.key === req.body.body.key) {
-          io.emit("consumer" + req.body.body.userid, message);
-        }
-      });
-      consumer.on("error", function (error) {
-        console.log("error", error);
-      });
-
-      FOCUS_KEY = req.body.body.key;
-      CONSUMER_RUNNING = false;
-    }
-    res.json({ ok: true, message: "consumer's ready" });
-  } catch (error) {
-    res.json({ ok: false, message: error });
-  }
-});
-
-server.listen(5000, () => {
-  console.log("listening on *:5000");
-});
+// note
+// socket.in(key).emit
+// socket.to(socket.id).to(key).emit
+// io.sockets.in(key).emit("getmessage", {
+//   message: message.value,
+// });
+// socket.emit("getmessage", { message: data });
