@@ -31,14 +31,14 @@ io.on("connection", (socket) => {
 
     socket.join(key);
 
-    socket.emit("getmessage", {
-      message:
-        socket.id +
-        " join " +
-        key +
-        " number of room " +
-        io.sockets.adapter.rooms.get(key).size,
-    });
+    // socket.emit("getmessage", {
+    //   message:
+    //     socket.id +
+    //     " join " +
+    //     key +
+    //     " number of room " +
+    //     io.sockets.adapter.rooms.get(key).size,
+    // });
 
     consumer.onConsume({ topic, socket: socket.id }, (data) => {
       if (key === data.key) {
