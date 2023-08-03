@@ -41,6 +41,8 @@ io.on("connection", (socket) => {
     // });
 
     consumer({ topic, socket: socket.id }, (data) => {
+      console.log(data);
+
       if (key === data.key) {
         io.sockets.to(socket.id).emit("getmessage", {
           message: data,
