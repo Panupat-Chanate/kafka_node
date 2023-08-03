@@ -27,7 +27,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("joinroom", ({ topic, key }) => {
-    // console.log(socket.id + " join " + key);
+    console.log(socket.id + " join " + key);
 
     socket.join(key);
 
@@ -40,7 +40,7 @@ io.on("connection", (socket) => {
     //     io.sockets.adapter.rooms.get(key).size,
     // });
 
-    consumer.onConsume({ topic, socket: socket.id }, (data) => {
+    consumer({ topic, socket: socket.id }, (data) => {
       if (key === data.key) {
         io.sockets.to(socket.id).emit("getmessage", {
           message: data,
@@ -55,10 +55,6 @@ io.on("connection", (socket) => {
     socket.leave(key);
 
     socket.emit("getmessage", { message: socket.id + " leave " + key });
-
-    consumer.closeConsume({ topic: true }, (message) => {
-      console.log("kafka close " + message);
-    });
   });
 });
 

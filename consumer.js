@@ -25,10 +25,4 @@ const onConsume = async ({ topic, socketid }, cb) => {
   });
 };
 
-const closeConsume = ({ topic }, cb) => {
-  // consumer.close(true, function (message) {
-  //   cb(message);
-  // });
-};
-
-module.exports = { onConsume, closeConsume };
+module.exports = onConsume;
